@@ -52,7 +52,10 @@ to quickly create a Cobra application.`,
 				Handler: http.FileServer(http.Dir(directory)),
 			}
 			go func() {
-				server.ListenAndServe()
+				err := server.ListenAndServe()
+				if err != nil && err != http.ErrServerClosed {
+					fmt.Printf("Server \033[31mFailed\033[0m: %v", err)
+				}
 			}()
 			fmt.Printf("\nServer Live on \033[34mhttp://%v:%v\033[0m\n\n-> Press \033[31mEnter\033[0m to Stop the Server..", hostName, port)
 			fmt.Scanln()

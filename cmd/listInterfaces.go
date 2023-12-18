@@ -6,9 +6,26 @@ package cmd
 import (
 	"fmt"
 	"net"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
+
+func GetHosts() []Host {
+	var hosts []Host
+	interfaces, _ := net.Interfaces()
+	for _, hostName := range interfaces {
+		addrs, _ := hostName.Addrs()
+		for _, addr := range addrs {
+			if ip, ok := addr.(*net.IPNet); ok && !ip.IP.IsLoopback() {
+				if ip.IP.To4() != nil && !strings.HasPrefix(ip.IP.String(), "169.254") {
+					hosts = append(hosts, Host{IP: ip.IP.String(), Name: hostName.Name})
+				}
+			}
+		}
+	}
+	return hosts
+}
 
 var listInterfacesCmd = &cobra.Command{
 	Use:   "list-interfaces",
