@@ -41,13 +41,12 @@ func SelectHost() string {
 
 var checkPortCmd = &cobra.Command{
 	Use:   "check-port",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Checks Status of a Port",
+	Long: `Check Port Availability of any/all of your IP-Addresses with ease
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+This can help you manage your services and apps better,
+or maybe hunt down nefarious hidden services!`,
+
 	Run: func(cmd *cobra.Command, args []string) {
 		port, _ := cmd.Flags().GetInt("port")
 		chooseHost, _ := cmd.Flags().GetBool("address")
@@ -67,6 +66,6 @@ to quickly create a Cobra application.`,
 func init() {
 	rootCmd.AddCommand(checkPortCmd)
 
-	checkPortCmd.Flags().IntP("port", "p", 80, "Check Port Availability")
-	checkPortCmd.Flags().BoolP("address", "a", false, "Select Host for Port Checking")
+	checkPortCmd.Flags().IntP("port", "p", 80, "Check Port for Availability")
+	checkPortCmd.Flags().BoolP("address", "a", false, "Select IP-Address for Port Checking")
 }

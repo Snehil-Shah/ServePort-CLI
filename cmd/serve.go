@@ -25,13 +25,15 @@ func verifyDir(directory string) bool {
 
 var serveCmd = &cobra.Command{
 	Use:   "serve",
-	Short: "Starts a local HTTP Server",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Starts a quick HTTP Server",
+	Long: `Boot up a Quick, Simple & Usable Static File Server over Local, connected Private/Public or All Networks!
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+Serve specific Directories on any Port & Network using designated flags to configure the server
+Serving files over Private networks like Wifi/Ethernet makes Sharing files to other Computers quick & simple
+
+WARNING: Make sure you trust the Private or Public network you are serving over.
+Strictly avoid Serving over Public Networks as you are more vulnerable Unrestricted Access to your Server
+-> It's recommended to stick to Localhost for most menial tasks!`,
 
 	Run: func(cmd *cobra.Command, args []string) {
 		port, _ := cmd.Flags().GetInt("port")
@@ -70,5 +72,5 @@ func init() {
 
 	serveCmd.Flags().IntP("port", "p", 80, "Port to Serve on")
 	serveCmd.Flags().StringP("directory", "d", ".", "Directory to Serve")
-	serveCmd.Flags().BoolP("address", "a", false, "Select Server Host")
+	serveCmd.Flags().BoolP("address", "a", false, "Select Server Host?")
 }

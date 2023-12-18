@@ -29,21 +29,19 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "ServePort-CLI",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Use:   "ServePort",
+	Short: "A convenient CLI tool for Spawning Servers and managing Ports, IP-Addresses & Network Interfaces",
+	Long: `ServePort is a simple CLI tool to Control & Manage Servers, Ports & Network Devices.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+-> Spawn Static Servers over Local, Private & Public Networks allowing you to share your files with ease
+-> Check Port Availability on different IP-Addresses
+-> Lists all Network Interfaces on your machine along with their MAC, IPv4 & IPv6 Addresses
+
+WARNING: Make sure you trust the Private or Public network you are serving over.
+Strictly avoid Serving over Public Networks as you are more vulnerable Unrestricted Access to your Server
+-> It's recommended to stick to Localhost for most menial tasks!`,
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
@@ -52,13 +50,5 @@ func Execute() {
 }
 
 func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.ServePort-CLI.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

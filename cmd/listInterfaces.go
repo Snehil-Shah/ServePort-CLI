@@ -29,13 +29,16 @@ func GetHosts() []Host {
 
 var listInterfacesCmd = &cobra.Command{
 	Use:   "list-interfaces",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "List your Network Interfaces",
+	Long: `List all Network Interfaces on your Computer with their Details.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+Network Interfaces are Endpoints that connect your computer to various Networks.
+
+Example of these Networks: A Wifi Router, or an Ethernet Connection etc.
+that are all connected to you via a Network Interface with a unique IP-Address on that Network!
+
+View MAC, IPv4, IPv6 Addresses and other information of all Interfaces on your Machine with just One Command.
+`,
 	Run: func(cmd *cobra.Command, args []string) {
 		interfaces, err := net.Interfaces()
 		if err != nil {
