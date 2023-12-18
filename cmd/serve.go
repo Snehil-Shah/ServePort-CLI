@@ -35,6 +35,7 @@ func GetHosts() []Host {
 	return hosts
 }
 
+// TODO: Error handling
 func SelectHost() string {
 	hosts := GetHosts()
 	var items = []Host{{IP: "127.0.0.1", Name: "127.0.0.1 - Localhost"}}
