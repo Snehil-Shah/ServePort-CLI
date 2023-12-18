@@ -32,7 +32,7 @@ Serve specific Directories on any Port & Network using designated flags to confi
 Serving files over Private networks like Wifi/Ethernet makes Sharing files to other Computers quick & simple
 
 WARNING: Make sure you trust the Private or Public network you are serving over.
-Strictly avoid Serving over Public Networks as you are more vulnerable Unrestricted Access to your Server
+Strictly avoid Serving over Public Networks like Public Wifi's as you are more vulnerable to Unrestricted Access to your Server
 -> It's recommended to stick to Localhost for most menial tasks!`,
 
 	Run: func(cmd *cobra.Command, args []string) {
@@ -59,7 +59,11 @@ Strictly avoid Serving over Public Networks as you are more vulnerable Unrestric
 					fmt.Printf("Server \033[31mFailed\033[0m: %v", err)
 				}
 			}()
-			fmt.Printf("\nServer Live on \033[34mhttp://%v:%v\033[0m\n\n-> Press \033[31mEnter\033[0m to Stop the Server..", hostName, port)
+			if hostName == "0.0.0.0" || hostName == "127.0.0.1" || hostName == "localhost" {
+				fmt.Printf("\nServer Live on \033[34mhttp://localhost:%v\033[0m\n\n-> Press \033[31mEnter\033[0m to Stop the Server..", port)
+			} else {
+				fmt.Printf("\nServer Live on \033[34mhttp://%v:%v\033[0m\n\n-> Press \033[31mEnter\033[0m to Stop the Server..", hostName, port)
+			}
 			fmt.Scanln()
 			server.Shutdown(context.Background())
 			fmt.Print("\nServer Stopped!")

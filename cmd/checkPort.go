@@ -23,6 +23,7 @@ func SelectHost() string {
 	for _, host := range hosts {
 		items = append(items, Host{Name: fmt.Sprintf("%v - %v", host.IP, host.Name), IP: host.IP})
 	}
+	items = append(items, Host{Name: "0.0.0.0 - All Interfaces (Not Recommended)", IP: "0.0.0.0"})
 	fmt.Printf("\n")
 	prompt := promptui.Select{
 		Label:    "Select Host Address",
