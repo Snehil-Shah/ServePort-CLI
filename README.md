@@ -72,6 +72,7 @@ You can execute a command in the format:
 
 **WARNING**: Make sure you trust the Private or Public network you are serving over.
 Strictly avoid Serving over Public Networks like Public Wifi's as you are more vulnerable to Unrestricted Access to your Server
+
 -> It's recommended to stick to `Localhost` for most menial tasks!
 
 #### Commands
