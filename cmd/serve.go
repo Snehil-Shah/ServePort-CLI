@@ -4,13 +4,12 @@ Copyright © 2023 Snehil Shah <snehilshah.989@gmail.com>
 package cmd
 
 import (
+	"context"
 	"fmt"
-	"net"
 	"net/http"
-	"strings"
+	"os"
 	"time"
 
-	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 )
 
@@ -19,43 +18,9 @@ type Host struct {
 	Name string
 }
 
-func GetHosts() []Host {
-	var hosts []Host
-	interfaces, _ := net.Interfaces()
-	for _, hostName := range interfaces {
-		addrs, _ := hostName.Addrs()
-		for _, addr := range addrs {
-			if ip, ok := addr.(*net.IPNet); ok && !ip.IP.IsLoopback() {
-				if ip.IP.To4() != nil && !strings.HasPrefix(ip.IP.String(), "169.254") {
-					hosts = append(hosts, Host{IP: ip.IP.String(), Name: hostName.Name})
-				}
-			}
-		}
-	}
-	return hosts
-}
-
-// TODO: Error handling
-func SelectHost() string {
-	hosts := GetHosts()
-	var items = []Host{{IP: "127.0.0.1", Name: "127.0.0.1 - Localhost"}}
-	for _, host := range hosts {
-		items = append(items, Host{Name: fmt.Sprintf("%v - %v", host.IP, host.Name), IP: host.IP})
-	}
-	fmt.Printf("\n")
-	prompt := promptui.Select{
-		Label:    "Select Host Address",
-		Items:    items,
-		HideHelp: true,
-		Templates: &promptui.SelectTemplates{
-			Label:    "{{ . }}:",
-			Active:   "> {{ .Name | magenta }}",
-			Inactive: "  {{ .Name }}",
-			Selected: "> {{ .Name | magenta }}",
-		},
-	}
-	i, _, _ := prompt.Run()
-	return items[i].IP
+func verifyDir(directory string) bool {
+	_, err := os.Stat(directory)
+	return !os.IsNotExist(err)
 }
 
 var serveCmd = &cobra.Command{
@@ -77,13 +42,23 @@ to quickly create a Cobra application.`,
 			hostName = SelectHost()
 			time.Sleep(100 * time.Millisecond)
 		}
-		go func() {
-			http.Handle("/", http.FileServer(http.Dir(directory)))
-			http.ListenAndServe(fmt.Sprintf("%s:%d", hostName, port), nil)
-		}()
-		fmt.Printf("\nServer Live on \033[34mhttp://%v:%v\033[0m\n\n-> Press \033[31mEnter\033[0m to Stop the Server..", hostName, port)
-		fmt.Scanln()
-		fmt.Print("\nServer Stopped!")
+		if !PortAvailable(hostName, port) {
+			fmt.Printf("\nPort %d is \033[31munavailable\033[0m\n", port)
+		} else if !verifyDir(directory) {
+			fmt.Printf("\nDirectory does \033[31mNOT\033[0m Exist!\n")
+		} else {
+			server := &http.Server{
+				Addr:    fmt.Sprintf("%s:%d", hostName, port),
+				Handler: http.FileServer(http.Dir(directory)),
+			}
+			go func() {
+				server.ListenAndServe()
+			}()
+			fmt.Printf("\nServer Live on \033[34mhttp://%v:%v\033[0m\n\n-> Press \033[31mEnter\033[0m to Stop the Server..", hostName, port)
+			fmt.Scanln()
+			server.Shutdown(context.Background())
+			fmt.Print("\nServer Stopped!")
+		}
 	},
 }
 
