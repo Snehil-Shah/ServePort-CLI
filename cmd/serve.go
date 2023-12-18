@@ -19,7 +19,7 @@ type Host struct {
 	Name string
 }
 
-func getHosts() []Host {
+func GetHosts() []Host {
 	var hosts []Host
 	interfaces, _ := net.Interfaces()
 	for _, hostName := range interfaces {
@@ -35,15 +35,15 @@ func getHosts() []Host {
 	return hosts
 }
 
-func selectHost() string {
-	hosts := getHosts()
+func SelectHost() string {
+	hosts := GetHosts()
 	var items = []Host{{IP: "127.0.0.1", Name: "127.0.0.1 - Localhost"}}
 	for _, host := range hosts {
 		items = append(items, Host{Name: fmt.Sprintf("%v - %v", host.IP, host.Name), IP: host.IP})
 	}
 	fmt.Printf("\n")
 	prompt := promptui.Select{
-		Label:    "Select Server Host",
+		Label:    "Select Host Address",
 		Items:    items,
 		HideHelp: true,
 		Templates: &promptui.SelectTemplates{
@@ -70,10 +70,10 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		port, _ := cmd.Flags().GetInt("port")
 		directory, _ := cmd.Flags().GetString("directory")
-		chooseHost, _ := cmd.Flags().GetBool("host")
+		chooseHost, _ := cmd.Flags().GetBool("address")
 		hostName := "localhost"
 		if chooseHost {
-			hostName = selectHost()
+			hostName = SelectHost()
 			time.Sleep(100 * time.Millisecond)
 		}
 		go func() {
@@ -91,5 +91,5 @@ func init() {
 
 	serveCmd.Flags().IntP("port", "p", 80, "Port to Serve on")
 	serveCmd.Flags().StringP("directory", "d", ".", "Directory to Serve")
-	serveCmd.Flags().BoolP("host", "i", false, "Select Server Host")
+	serveCmd.Flags().BoolP("address", "a", false, "Select Server Host")
 }
